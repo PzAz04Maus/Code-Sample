@@ -1,0 +1,429 @@
+/* ************
+Stephen Carter
+Array.h
+Created 6APR21?
+*/
+#pragma once
+#include "exception.h"
+
+
+/* Class: iter_array
+
+Purpose: Handles iterating through class Array
+
+Manager Functions
+	iter_array(T* value)
+	~iter_array();
+		empty
+	operator=(const iter_array<T>&copy)
+
+Data Members
+	T* m_ptr
+
+Methods
+	operator*()
+	operator==
+	operator!=
+	operator++()
+	operator++(int)
+	
+*/
+
+template<class T>
+class iter_array
+{
+public:
+	iter_array(T* value);
+	~iter_array();
+	iter_array<T>& operator=(const iter_array<T>& copy);
+
+	T& operator*();
+	template<class T> friend bool operator==(const iter_array<T>& left, const iter_array<T>& right);
+	template<class T> friend bool operator!=(const iter_array<T>& left, const iter_array<T>& right);
+
+	iter_array<T>& operator++();
+	iter_array<T> operator++(int);
+private:
+	T* m_ptr;
+
+};
+
+/* Class: Array
+
+Purpose: A single dimensional Dynamic array with iter_array and first class characteristics
+
+Friend classes
+	iter_array<T>
+
+Manager Functions:
+	Array();
+	Array(int size, int index = 0);
+	Array(Array<T>& copy);
+	Array(Array<T>&& move);
+	~Array();
+
+	Array<T>& operator=(Array<T>& copy);
+	Array<T>& operator=(Array<T>&& move);
+
+Data Members
+	T* m_data;
+	int m_size;
+	int m_index;
+		Default is 0
+
+Methods
+	operator[](int index)
+		one problem with the unit testing provided is that they required operator[] to do bounds checking when the specifications REQUIRED it to not boundary check
+		Therefoore, operator[] is now an alias for at()
+	at(int index)
+		boundary checks and returns element @ index
+	*data()
+		returns raw array data
+	for_each
+		applies function with 1 argument of a T reference to the entire database
+	push_back(T value)
+		increases m_size by 1 and initializes that data with value
+	pop_back()
+		deletes the last element. Doesn't return anything
+	pop_return()
+		like pop_back, but returns the value of the deleted element
+	setLength(int size)
+	setStartIndex()
+	getLength()
+		while the specifications required this to be getSize(), the unit tests required getLength(). Therefore, the code was refactored to adhere to the unit tests
+	getStartIndex()
+
+	begin()
+		constructs an iter_array of the beginning element
+	end()
+		constructs an iter_array of the element past the end
+
+*/
+
+template <class T>
+class Array
+{
+public:
+	//canonicals
+	Array();
+	Array(int size, int index = 0);
+	Array(Array<T>& copy);
+	Array(Array<T>&& move);
+	~Array();
+
+	Array<T>& operator=(Array<T>& copy);
+	Array<T>& operator=(Array<T>&& move);
+
+	//content
+	T& operator[](int index);
+	T& at(int index);
+	T* data();
+	void for_each(void (*fn)(T& data));
+
+	//New content
+	void push_back(T value);
+	void pop_back();
+	T pop_return();
+
+
+	void setLength(int size);
+	void setStartIndex(int index);
+	int getLength();//size();
+	int getStartIndex();
+
+	//forward iter_array
+	friend class iter_array<T>;
+
+	iter_array<T> begin();
+	iter_array<T> end();
+
+private:
+	T* m_data;
+	int m_size;
+	int m_index;
+};
+
+
+template<class T>
+inline Array<T>::Array()
+	:Array(0)
+{
+
+}
+
+template<class T>
+inline Array<T>::Array(int size, int index)
+	: m_size(size), m_data(nullptr), m_index(index)
+{
+	if (m_size < 0)
+	{
+		throw Exception("illegal array size");
+	}
+	else
+	{
+		m_data = new T[size];
+		for (int i = 0; i < m_size; i++)
+		{
+			m_data[i] = NULL;
+		}
+	}
+}
+
+template<class T>
+inline Array<T>::Array(Array<T>& copy)
+	:m_size(copy.m_size), m_data(new T[copy.m_size]), m_index(copy.m_index)
+{
+	for (int i = 0; i < m_size; i++)
+	{
+		at(i) = copy.at(i);
+	}
+}
+
+template<class T>
+inline Array<T>::Array(Array<T>&& move)
+	:m_size(move.m_size), m_data(move.m_data), m_index(move.m_index)
+{
+	move.m_size = 0;
+	move.m_index = 0;
+	move.m_data = nullptr;
+}
+
+template<class T>
+inline Array<T>::~Array()
+{
+	delete[]m_data;
+}
+
+template<class T>
+inline Array<T>& Array<T>::operator=(Array<T>& copy)
+{
+	if (this != &copy)
+	{
+		delete[]m_data;
+		m_size = copy.m_size;
+		m_index = copy.m_index;
+
+		m_data = new T[m_size];
+		for (int i = 0; i < m_size; i++)
+		{
+			m_data[i] = copy.m_data[i];
+		}
+
+		m_size = copy.m_size;
+		m_index = copy.m_index;
+	}
+	else
+	{
+		throw Exception("Cannot copy to self!");
+	}
+	return *this;
+}
+
+template<class T>
+inline Array<T>& Array<T>::operator=(Array<T>&& move)
+{
+	if (this != &move)
+	{
+		delete m_data;
+
+		m_data = move.m_data;
+		m_size = move.m_size;
+		m_index = move.m_index;
+
+		move.m_data = nullptr;
+		move.m_size = 0;
+		move.m_index = 0;
+	}
+	else
+	{
+		throw Exception("Cannot move to self!");
+	}
+
+	return *this;
+}
+
+template<class T>
+inline T& Array<T>::operator[](int index)
+{
+	
+	//since this doesn't have bounds testing DESPITE the requirements asking for no bounds checking...
+	return at(index);
+	//return m_data[index - m_index];
+}
+
+template<class T>
+inline T& Array<T>::at(int index)
+{
+
+	if (m_data == nullptr)
+	{
+		throw Exception("Empty array!");
+	}
+	else
+	{
+		if ((index > m_size + m_index) || (index < m_index))
+		{
+			throw Exception("Out of bounds!");
+		}
+		else
+		{
+			return m_data[index - m_index];
+		}
+	}
+
+}
+
+template<class T>
+inline T* Array<T>::data()
+{
+	return m_data;
+}
+
+template<class T>
+inline void Array<T>::for_each(void(*fn)(T& data))
+{
+	for (int i = 0; i < m_size; i++)
+	{
+		(*fn)(m_data[i]);
+	}
+}
+
+template<class T>
+inline void Array<T>::setLength(int size)
+{
+	if (size < 0)
+	{
+		throw Exception("length not right");
+	}
+	else
+	{
+		T* temp = new T[m_size];
+		for (int i = 0; i < m_size; i++)
+		{
+			temp[i] = m_data[i];
+		}
+		delete[]m_data;
+		m_data = new T[size];
+
+		int shortest = m_size < size ? m_size : size;
+
+		for (int i = 0; i < shortest; i++)
+		{
+			m_data[i] = temp[i];
+		}
+
+		m_size = size;
+		delete[]temp;
+		temp = nullptr;
+	}
+}
+
+template<class T>
+inline void Array<T>::setStartIndex(int index)
+{
+	m_index = index;
+}
+
+template<class T>
+inline int Array<T>::getLength()
+{
+	return m_size;
+}
+
+template<class T>
+inline int Array<T>::getStartIndex()
+{
+	return m_index;
+}
+
+template<class T>
+inline iter_array<T> Array<T>::begin()
+{
+	return iter_array<T>(&m_data[0]);
+}
+
+template<class T>
+inline iter_array<T> Array<T>::end()
+{
+	return iter_array<T>(&m_data[m_size]);
+}
+
+template<class T>
+inline void Array<T>::push_back(T value)
+{
+	setLength(m_size + 1);
+	m_data[m_size - 1] = value;
+}
+
+template<class T>
+inline void Array<T>::pop_back()
+{
+	setLength(m_size - 1);
+}
+
+template<class T>
+inline T Array<T>::pop_return()
+{
+	T data = m_data[m_size - 1];
+	setLength(m_size - 1);
+	return data;
+}
+
+template<class T>
+inline T& iter_array<T>::operator*()
+{
+	return *m_ptr;
+}
+
+template<class T>
+inline iter_array<T>& iter_array<T>::operator++()
+{
+	m_ptr++;
+	return *this;
+}
+
+template<class T>
+inline iter_array<T> iter_array<T>::operator++(int)
+{
+	iter_array temp = *this;
+	++(*this);
+	return temp;
+}
+
+template<class T>
+inline iter_array<T>::iter_array(T* value)
+	:m_ptr(value)
+{
+
+}
+
+template<class T>
+inline iter_array<T>::~iter_array()
+{
+
+}
+
+template<class T>
+inline iter_array<T>& iter_array<T>::operator=(const iter_array<T>& copy)
+{
+	if (*this != copy)
+	{
+		m_ptr = copy.m_ptr;
+	}
+	else
+	{
+		throw Exception("Illegal copying of self!");
+	}
+	return *this;
+}
+
+template<class T>
+inline bool operator==(const iter_array<T>& left, const iter_array<T>& right)
+{
+	return left.m_ptr == right.m_ptr;
+}
+template<class T>
+inline bool operator!=(const iter_array<T>& left, const iter_array<T>& right)
+{
+	return left.m_ptr != right.m_ptr;
+}

@@ -1,0 +1,10 @@
+﻿  Exception.cpp
+  main.cpp
+  test iterator.cpp
+  test LL.cpp
+  Test Stack.cpp
+  test.cpp
+  Generating Code...
+D:\School\CST 211\ASSN3 STACK SPRING\ASSN3 STACK SPRING\linklist.h(304): warning C4172: returning address of local variable or temporary: answer
+D:\School\CST 211\ASSN3 STACK SPRING\ASSN3 STACK SPRING\linklist.h(320): warning C4172: returning address of local variable or temporary: answer
+  ASSN3 STACK SPRING.vcxproj -> D:\School\CST 211\ASSN3 STACK SPRING\Debug\ASSN3 STACK SPRING.exe
