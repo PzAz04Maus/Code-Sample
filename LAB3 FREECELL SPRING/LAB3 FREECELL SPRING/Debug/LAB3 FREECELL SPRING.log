@@ -1,0 +1,27 @@
+﻿  Card.cpp
+  Deck.cpp
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\Deck.cpp(579,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Exception.cpp
+  Game.cpp
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\Game.cpp(142,6): warning C4101: 'fail': unreferenced local variable
+  main.cpp
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u0395' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03BB' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03B7' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03BD' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03B9' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03BA' cannot be represented in the current code page (1252)
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\main.cpp(51,19): warning C4566: character represented by universal-character-name '\u03AC' cannot be represented in the current code page (1252)
+  moveData.cpp
+  test game.cpp
+  test iterator.cpp
+  test LL.cpp
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\test LL.cpp(20,13): warning C4834: discarding return value of function with 'nodiscard' attribute
+  Test Stack.cpp
+  test.cpp
+  Generating Code...
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\linklist.h(304): warning C4172: returning address of local variable or temporary: answer
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\linklist.h(320): warning C4172: returning address of local variable or temporary: answer
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\Exception.cpp(21): warning C4717: 'operator<<': recursive on all control paths, function will cause runtime stack overflow
+D:\School\CST 211\LAB3 FREECELL SPRING\LAB3 FREECELL SPRING\Array.h(409): warning C4715: 'Array<Tableau<Card> *>::peekElement': not all control paths return a value
+  LAB3 FREECELL SPRING.vcxproj -> D:\School\CST 211\LAB3 FREECELL SPRING\Debug\LAB3 FREECELL SPRING.exe
